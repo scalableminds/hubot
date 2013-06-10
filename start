@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ ! -f .env ]; then
+	echo "I couldn't find an .env file with the variables I need."
+	exit 1
+fi
+
+source .env
+export HUBOT_CAMPFIRE_ACCOUNT HUBOT_CAMPFIRE_TOKEN HUBOT_CAMPFIRE_ROOMS HUBOT_AUTH_ADMIN PORT
+bin/hubot -a campfire -n Hubot
