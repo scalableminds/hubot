@@ -1,10 +1,10 @@
 # Hubot
 
-This is a version of GitHub's Campfire bot, hubot. He's pretty cool.
+## Install scm hubot
 
-This version is designed to be deployed on [Heroku][heroku].
+Get `redis` (Homebrew or apt-get). Get `node` and `npm` (Version >= 0.10). Get the `.env` file. 
 
-[heroku]: http://www.heroku.com
+Run `./start`.
 
 ## Playing with Hubot
 

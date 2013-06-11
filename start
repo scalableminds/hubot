@@ -6,5 +6,4 @@ if [ ! -f .env ]; then
 fi
 
 source .env
-export HUBOT_CAMPFIRE_ACCOUNT HUBOT_CAMPFIRE_TOKEN HUBOT_CAMPFIRE_ROOMS HUBOT_AUTH_ADMIN PORT HUBOT_TUMBLR_API_KEY
 bin/hubot -a campfire -n Hubot
