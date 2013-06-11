@@ -36,11 +36,19 @@ module.exports = (robot) ->
 
   robot.respond /give me some love/i, (msg) ->
 
-    getGoslingPic(msg)
+    if apiKey
+      getGoslingPic(msg)
+    else
+      msg.send "Please set a tumblr API key. hubot set env HUBOT_TUMBLR_API_KEY=\"123\""
 
 
   robot.respond /give me some love (\d+)/i, (msg) ->
-    count = msg.match[1] - 1 || 5
+    
+    if apiKey
+      count = msg.match[1] - 1 || 5
 
-    for i in [count..1]
-      getGoslingPic(msg)
+      for i in [count..1]
+        getGoslingPic(msg)
+        
+    else
+      msg.send "Please set a tumblr API key. hubot set env HUBOT_TUMBLR_API_KEY=\"123\""
