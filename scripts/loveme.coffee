@@ -1,5 +1,5 @@
 # Description:
-#   Pugme is the most important thing in your life
+#   Give me some love sends you romantic messages from Programmer Ryan Gosling
 #
 # Dependencies:
 #   None
@@ -8,8 +8,8 @@
 #   None
 #
 # Commands:
-#   hubot pug me - Receive a pug
-#   hubot pug bomb N - get N pugs
+#   hubot give me some love - Receive a gosling pic
+#   hubot give me some love N - get N gosiling pics
 
 apiKey = process.env.HUBOT_TUMBLR_API_KEY
 
