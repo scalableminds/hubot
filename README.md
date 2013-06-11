@@ -4,42 +4,26 @@
 
 *   Install Redis (`brew redis` or `apt-get install redis-server`). 
 *   Make sure to have `node` (Version >= 0.10). 
-*   Get the scm `.env` file. 
-
-Run `./start`
-
-## Playing with Hubot
-
-You'll need to install the necessary dependencies for hubot. All of
-those dependencies are provided by [npm][npmjs].
-
-[npmjs]: http://npmjs.org
-
-## HTTP Listener
-
-Hubot has a HTTP listener which listens on the port specified by the `PORT`
-environment variable.
-
-You can specify routes to listen on in your scripts by using the `router`
-property on `robot`.
-
-```coffeescript
-module.exports = (robot) ->
-  robot.router.get "/hubot/version", (req, res) ->
-    res.end robot.version
-```
-
-There are functions for GET, POST, PUT and DELETE, which all take a route and
-callback function that accepts a request and a response.
+*   Get the scm `.env` file and put it in hubot's root directory.
+*   Run `./start`
 
 
-### Testing Hubot without Campfire
+## Useful commands
+
+*   `hubot update` – Have hubot update itself.
+*   `hubot die` – Kill hubot. It's actually a restart.
+*   `hubot set env SECRET="Beer is awesome."` – We don't push API keys and such to Github. So set them here. Make sure to restart hubot afterwards.
+*   `hubot pug bomb 10` – Aren't they cute?
+*   `hubot give me some love` – Isn't he stupid?
+
+
+## Testing Hubot without Campfire
 
 You can test your hubot by running the following.
 
     % bin/hubot
     
-Keep in mind to export any environment variables manually.
+Keep in mind to export any needed environment variables manually or use `hubot set env`.
 
 You'll see some start up output about where your scripts come from and a
 prompt.

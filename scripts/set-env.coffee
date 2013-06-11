@@ -39,6 +39,7 @@ module.exports = (robot) ->
         # set new env variable
         [a, key, value] = msg.match
         env[key] = value
+        process.env[key] = value
 
         # make new .env file
         newEnvFile = Object.keys(env)
