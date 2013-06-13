@@ -13,26 +13,28 @@
 
 apiKey = process.env.HUBOT_TUMBLR_API_KEY
 
-getImage = (msg, id) ->
-
-  msg.http("http://api.tumblr.com/v2/blog/programmerryangosling.tumblr.com/posts?api_key=#{apiKey}&limit=1&offset=#{id}").get() (err, response, body ) ->
-
-    post = JSON.parse(body)
-    msg.send post.response.posts[0].photos[0].original_size.url
-
-
-getGoslingPic = (msg) ->
-
-  msg.http("http://api.tumblr.com/v2/blog/programmerryangosling.tumblr.com/info?api_key=#{apiKey}").get() (err, response, body) ->
-
-    blog = JSON.parse(body)
-    postCount = blog.response.blog.posts
-    id = Math.floor(Math.random() * postCount)
-
-    getImage(msg, id)
-
 
 module.exports = (robot) ->
+
+  getImage = (msg, id) ->
+
+    robot.http("http://api.tumblr.com/v2/blog/programmerryangosling.tumblr.com/posts?api_key=#{apiKey}&limit=1&offset=#{id}").get() (err, response, body ) ->
+
+      post = JSON.parse(body)
+      msg.send post.response.posts[0].photos[0].original_size.url
+
+
+  getGoslingPic = (msg) ->
+
+    robot.http("http://api.tumblr.com/v2/blog/programmerryangosling.tumblr.com/info?api_key=#{apiKey}").get() (err, response, body) ->
+
+      blog = JSON.parse(body)
+      postCount = blog.response.blog.posts
+      id = Math.floor(Math.random() * postCount)
+
+      getImage(msg, id)
+
+      
 
   robot.respond /give me some love/i, (msg) ->
 

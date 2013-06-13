@@ -26,7 +26,6 @@ module.exports = (robot) ->
 
   getCanteenMeals = (id, msg, callback) ->
 
-    console.log "http://openmensa.org/api/v2/canteens/#{id}/days/#{moment().format("YYYY-MM-DD")}/meals"
     async.waterfall [
       (callback) -> robot.http("http://openmensa.org/api/v2/canteens/#{id}/days/#{moment().format("YYYY-MM-DD")}/meals").get()(callback)
       (response, body, callback) ->
@@ -52,10 +51,12 @@ module.exports = (robot) ->
           if err
             msg.send("oops. #{err}")
           else
-            msg.send(canteens.map( (canteen) -> 
-              """#{canteen.name}
-              #{canteen.meals.map( (a) -> "* #{a}" ).join("\n")}"""
-            ).join("\n\n"))
+            canteens.forEach( (canteen) -> 
+              msg.send(
+                """#{canteen.name}
+                #{canteen.meals.map( (a) -> "* #{a}" ).join("\n")}"""
+              )
+            )
       )
     else
       msg.send "Please set some canteen ids from http://openmensa.org/api/v2/canteens. hubot set env HUBOT_CANTEEN_IDS=\"1,2,3\""
