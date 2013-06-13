@@ -6,4 +6,4 @@ if [ ! -f .env ]; then
 fi
 
 source .env
-bin/hubot -a campfire -n Hubot
+bin/hubot -a hipchat -n Hubot
