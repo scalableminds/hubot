@@ -2,6 +2,7 @@
 
 ## Install
 
+*   Install native icu (`brew install icu4c`, `brew link icu4c --force` or `apt-get install libexpat1-dev libicu-dev`)
 *   Install Redis (`brew redis` or `apt-get install redis-server`). 
 *   Make sure to have `node` (Version >= 0.10). 
 *   Get the scm `.env` file and put it in hubot's root directory.
