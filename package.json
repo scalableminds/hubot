@@ -1,13 +1,13 @@
 {
-  "name": "hosted-hubot",
-  "version": "2.5.1",
-  "author": "GitHub Inc.",
+  "name": "scm-hubot",
+  "version": "0.0.1",
+  "author": "scalable minds + GitHub Inc.",
   "keywords": [
     "github",
     "hubot",
     "bot"
   ],
-  "description": "A simple helpful robot for your Company",
+  "description": "Humble bot for doing our work.",
   "licenses": [
     {
       "type": "MIT",
