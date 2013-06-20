@@ -12,7 +12,7 @@
 
 async = require("async")
 moment = require("moment")
-canteenIds = process.env.HUBOT_CANTEEN_IDS.split(",")
+canteenIds = process.env.HUBOT_CANTEEN_IDS?.split(",")
 
 module.exports = (robot) ->
 
@@ -21,7 +21,12 @@ module.exports = (robot) ->
     async.waterfall [
       (callback) -> robot.http("http://openmensa.org/api/v2/canteens/#{id}").get()(callback)
       (response, body, callback) ->
-        callback(null, JSON.parse(body).name)
+        try
+          name = JSON.parse(body).name
+          callback(null, name)
+        catch error
+          callback("Error parsing name of Canteen \##{id}")
+
     ], callback
 
   getCanteenMeals = (id, msg, callback) ->
@@ -29,7 +34,18 @@ module.exports = (robot) ->
     async.waterfall [
       (callback) -> robot.http("http://openmensa.org/api/v2/canteens/#{id}/days/#{moment().format("YYYY-MM-DD")}/meals").get()(callback)
       (response, body, callback) ->
-        callback(null, JSON.parse(body).map( (meal) -> meal.name ))
+
+        if response.statusCode != 200
+          callback(null, ["No meal available for today"])
+
+        else
+          try
+            meals = JSON.parse(body).map( (meal) -> meal.name )
+            callback(null, meals)
+            
+          catch error
+            callback(null, ["Error while parsing meals"])
+          
     ], callback
 
 
