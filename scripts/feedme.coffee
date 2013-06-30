@@ -44,7 +44,7 @@ module.exports = (robot) ->
       if json.status == "OK"
         places = JSON.parse(body).results
 
-        for i in [0..Math.min(places.length, 10)]
+        for i in [0...Math.min(places.length, 6)]
           getPlaceInfo(msg, places[i].reference)
 
       else
