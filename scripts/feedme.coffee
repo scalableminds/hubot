@@ -27,13 +27,12 @@ module.exports = (robot) ->
       if json.status == "OK"
         details = JSON.parse(body).result
 
-        msg.send details.name
-        msg.send "    " + details.formatted_address
-        msg.send "    " + details.formatted_phone_number + " - " + details.website
-        msg.send ""
+        msg.send details.name + "\n" +
+          "    " + details.formatted_address + "\n" + 
+          "    " + details.formatted_phone_number + " - " + details.website + "\n\n"
 
       else
-        msg.send "I am sorry. Something went wrong..."
+        msg.send "Something went wrong. I am sorry..."
 
 
   findPlaces = (msg, query) ->
@@ -49,7 +48,7 @@ module.exports = (robot) ->
           getPlaceInfo(msg, places[i].reference)
 
       else
-        msg.send "I am sorry. Something went wrong..."
+        msg.send "Something went wrong. I am sorry..."
 
 
   robot.respond /feed me ((.*) in )?(.*)/i, (msg) ->
