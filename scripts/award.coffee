@@ -63,4 +63,4 @@ module.exports = (robot) ->
 		if apiToken
 			getStats(msg)
 		else
-			msg.send("Please set a github API token. hubot set env HUBOT_GITHUB_API_TOKEN=\"abc123\"")
+			msg.send("Please set a github API token (https://github.com/settings/applications). hubot set env HUBOT_GITHUB_API_TOKEN=\"abc123\"")

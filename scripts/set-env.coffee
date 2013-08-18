@@ -14,6 +14,12 @@ fs = require("fs")
 
 module.exports = (robot) ->
 
+  robot.respond /get env (.+)$/i, (msg) ->
+
+    [a, key] = msg.match
+    msg.send "#{key}=#{process.env[key]}"
+    
+
   robot.respond /set env (.+)=\"?([^\"]+)\"?$/i, (msg) ->
 
     fs.readFile(".env", (err, envFile) ->
