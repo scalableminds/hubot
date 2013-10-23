@@ -34,5 +34,5 @@ module.exports = (robot) ->
     cmd = msg.match[1]
     app = msg.match[2]
     mode = msg.match[3] || "dev"
-    fireAdminEvent(msg, {'cmd': cmd, 'app': app, 'mode': mode}, "hubot")
+    fireAdminEvent(msg, {'cmd': cmd, 'app': app, 'mode': mode}, "hubot-services")
 
