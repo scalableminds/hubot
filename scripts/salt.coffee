@@ -8,7 +8,7 @@
 #   None
 #
 # Commands:
-#   hubot salt (start|stop|restart) (stackrenderer|levelcreator|director|oxalis) (prod|dev) - start/stop services
+#   hubot salt (start|stop|restart) (stackrenderer|levelcreator|director|oxalis) branch (prod|dev) - start/stop services
 
 sys = require('sys')
 exec = require('child_process').exec
@@ -30,9 +30,10 @@ fireAdminEvent = (msg, data, tag) ->
     msg.send("Switch to room '#{deploymentRoom}' for doing administrative tasks")
 
 module.exports = (robot) ->
-  robot.respond /salt (start|stop|restart) (stackrenderer|levelcreator|director|oxalis) (prod|dev)?$/i, (msg) ->
+  robot.respond /salt (start|stop|restart) (stackrenderer|levelcreator|director|oxalis) ([a-zA-Z-._0-9]+) (prod|dev)?$/i, (msg) ->
     cmd = msg.match[1]
-    app = msg.match[2]
-    mode = msg.match[3] || "dev"
-    fireAdminEvent(msg, {'cmd': cmd, 'app': app, 'mode': mode}, "hubot-services")
+    project = msg.match[2]
+    branch = msg.match[3]
+    mode = msg.match[4] || "dev"
+    fireAdminEvent(msg, {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}, "hubot-services")
 
