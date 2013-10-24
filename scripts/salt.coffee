@@ -16,7 +16,7 @@ exec = require('child_process').exec
 deploymentRoom = "deployment"
 
 fireAdminEvent = (msg, data, tag) -> 
-  cmd = "sudo salt-call event.fire_master #{JSON.stringify(data)} #{tag}"
+  cmd = "sudo salt-call event.fire_master #{JSON.stringify(data).replace(/\"/g, "\\\"")} #{tag}"
   if msg.message.room == deploymentRoom
     exec(cmd,  (error, stdout, stderr) -> 
       if error == null
