@@ -29,12 +29,8 @@ module.exports = (robot) ->
 
     robot.logger.info "Message '#{message}' received for room #{room}"
 
-    user = robot.brain.userForId 'broadcast'
-    user.room = room
-    user.type = 'groupchat'
-
-    if message
-      robot.send user, "#{message}"
+    if message and room
+      robot.messageRoom(room, message)
 
     res.writeHead 200, {'Content-Type': 'text/plain'}
     res.end 'Thanks\n'
