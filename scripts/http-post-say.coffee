@@ -20,17 +20,20 @@
 # Author:
 # insom
 # luxflux
+# lesnail
+
+roomNameToId = (name) -> 
+  "52503_deployment@conf.hipchat.com"
 
 module.exports = (robot) ->
   robot.router.post "/hubot/say", (req, res) ->
 
-    room = req.body.room
-    message = req.body.message
-
+    {room,message} = req.body
+    
     robot.logger.info "Message '#{message}' received for room #{room}"
 
-    if message and room
-      robot.messageRoom(room, message)
+    if message? and room?
+      robot.messageRoom(roomNameToId(room), message)
 
     res.writeHead 200, {'Content-Type': 'text/plain'}
     res.end 'Thanks\n'
