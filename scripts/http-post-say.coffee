@@ -29,11 +29,11 @@ module.exports = (robot) ->
   robot.router.post "/hubot/say", (req, res) ->
 
     {room,message} = req.body
-    
-    robot.logger.info "Message '#{message}' received for room #{room}"
+    messageReescaped = message.replace("\\n","\n")
+    robot.logger.info "Message received for room #{room}:\n#{messageReescaped}"
 
     if message? and room?
-      robot.messageRoom(roomNameToId(room), message)
+      robot.messageRoom(roomNameToId(room), messageReescaped)
 
     res.writeHead 200, {'Content-Type': 'text/plain'}
     res.end 'Thanks\n'
