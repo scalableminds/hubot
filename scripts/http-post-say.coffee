@@ -27,7 +27,7 @@ module.exports = (robot) ->
 
   robot.router.post "/hubot/say", (req, res) ->
 
-    @logger.debug "received request on /hubot/say: #{req.body}"
+    @logger.debug "received request on /hubot/say: #{JSON.stringify(req.body)}"
     {roomName,message} = req.body
     messageReescaped = message.replace("\\n","\n")
     robot.logger.info "Message received for room #{roomName}:\n#{messageReescaped}"
@@ -36,7 +36,7 @@ module.exports = (robot) ->
     if message? and roomName?
       robot.adapter.connector.getRooms (err, rooms, stanza) =>
         if rooms
-          @logger.debug "received room list: #{rooms}"
+          @logger.debug "received room list: #{JSON.stringify(rooms)}"
           for room in rooms
             if room['name'] == roomName
               robot.messageRoom(room['xmpp_jid'], messageReescaped)
