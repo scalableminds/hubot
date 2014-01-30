@@ -29,7 +29,7 @@ projectRooms = {
 
 fireAdminEvent = (msg, data, tag) -> 
   cmd = "sudo salt-call event.fire_master #{JSON.stringify(data).replace(/\"/g, "\\\"")} #{tag}"
-
+  msg.send("currently in room '#{msg.message.room}'")
   if msg.message.room == projectRooms[data['project']]
     exec(cmd,  (error, stdout, stderr) -> 
       if error == null
