@@ -39,7 +39,7 @@ module.exports = (robot) ->
           @logger.debug "received room list: #{JSON.stringify(rooms)}"
           for room in rooms
             if room['name'] == roomName
-              robot.messageRoom(room['xmpp_jid'], messageReescaped)
+              robot.messageRoom(room['jid'], messageReescaped)
 
     res.writeHead 200, {'Content-Type': 'text/plain'}
     res.end 'Thanks\n'
