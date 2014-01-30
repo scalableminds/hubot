@@ -33,7 +33,7 @@ module.exports = (robot) ->
       robot.adapter.connector.getRooms (err, rooms, stanza) =>
         if rooms
           for room in rooms
-            if room['name'] = roomName
+            if room['name'] == roomName
               robot.messageRoom(room['xmpp_jid'], messageReescaped)
 
     res.writeHead 200, {'Content-Type': 'text/plain'}
