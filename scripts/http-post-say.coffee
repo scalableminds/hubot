@@ -22,18 +22,19 @@
 # luxflux
 # lesnail
 
-roomNameToId = (name) -> 
-  "52503_deployment@conf.hipchat.com"
-
 module.exports = (robot) ->
   robot.router.post "/hubot/say", (req, res) ->
 
-    {room,message} = req.body
+    {roomName,message} = req.body
     messageReescaped = message.replace("\\n","\n")
     robot.logger.info "Message received for room #{room}:\n#{messageReescaped}"
 
-    if message? and room?
-      robot.messageRoom(roomNameToId(room), messageReescaped)
+    if message? and roomName?
+      robot.adapter.connector.getRooms (err, rooms, stanza) =>
+        if rooms
+          for room in rooms
+            if room['name'] = roomName
+              robot.messageRoom(room['xmpp_jid'], messageReescaped)
 
     res.writeHead 200, {'Content-Type': 'text/plain'}
     res.end 'Thanks\n'
