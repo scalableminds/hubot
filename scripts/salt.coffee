@@ -20,11 +20,17 @@ modeRegExp = "(prod|dev)"
 sys = require('sys')
 exec = require('child_process').exec
 
-deploymentRoom = "deployment"
+projectRooms = {
+  "director": "braingames",
+  "levelcreator": "braingames",
+  "stackrenderer": "braingames",
+  "oxalis": "oxalis"
+}
 
 fireAdminEvent = (msg, data, tag) -> 
   cmd = "sudo salt-call event.fire_master #{JSON.stringify(data).replace(/\"/g, "\\\"")} #{tag}"
-  if msg.message.room == deploymentRoom
+
+  if msg.message.room == projectRooms[data['project']]
     exec(cmd,  (error, stdout, stderr) -> 
       if error == null
         msg.send("ok!")
@@ -34,7 +40,7 @@ fireAdminEvent = (msg, data, tag) ->
   else if msg.message.room == "Shell"
     msg.send(cmd)
   else
-    msg.send("Switch to room '#{deploymentRoom}' for doing administrative tasks")
+    msg.send("Switch to room #{projectRooms[data['project']]} for administrating #{data['project']}")
 
 module.exports = (robot) ->
   robot.respond new RegExp("salt (start|stop|restart) #{projectsRegExp} #{branchRegExp} #{modeRegExp}?$","i"), (msg) ->
