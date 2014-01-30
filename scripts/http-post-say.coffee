@@ -27,7 +27,7 @@ module.exports = (robot) ->
 
     {roomName,message} = req.body
     messageReescaped = message.replace("\\n","\n")
-    robot.logger.info "Message received for room #{room}:\n#{messageReescaped}"
+    robot.logger.info "Message received for room #{roomName}:\n#{messageReescaped}"
 
     if message? and roomName?
       robot.adapter.connector.getRooms (err, rooms, stanza) =>
