@@ -57,3 +57,8 @@ module.exports = (robot) ->
     build_number = msg.match[5]
     if (cmd == "install" and build_number) or cmd == "remove"
       fireAdminEvent(msg, {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number}, "#{cmd}_packages")
+
+  robot.respond new RegExp("salt find #{projectsRegExp} #{modeRegExp}", "i"), (msg) -> 
+    project = msg.match[1]
+    mode = msg.match[2]
+    fireAdminEvent(msg, {'project': project, 'mode': mode}, "find_app")
