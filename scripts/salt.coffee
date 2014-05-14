@@ -14,6 +14,8 @@
 
 projects = ["stackrenderer", "levelcreator", "director", "oxalis"]
 projectsRegExp = "(#{projects.join("|")})"
+newInstallProjects = ["time-tracker"]
+newInstallProjectsRegExp = "(#{newInstallProjects.join("|")})"
 branchRegExp = "([a-zA-Z-._0-9]+)"
 modeRegExp = "(prod|dev)"
 
@@ -57,6 +59,15 @@ module.exports = (robot) ->
     build_number = msg.match[5]
     if (cmd == "install" and build_number) or cmd == "remove"
       fireAdminEvent(msg, {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number}, "#{cmd}_packages")
+  
+  robot.respond new RegExp("salt (install|remove) #{newInstallProjectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) -> 
+    cmd = msg.match[1]
+    project = msg.match[2]
+    branch = msg.match[3]
+    mode = msg.match[4]
+    build_number = msg.match[5]
+    if (cmd == "install" and build_number) or cmd == "remove"
+      fireAdminEvent(msg, {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number}, "#{cmd}_packages_new")
 
   robot.respond new RegExp("salt find #{projectsRegExp} #{modeRegExp}", "i"), (msg) -> 
     project = msg.match[1]
