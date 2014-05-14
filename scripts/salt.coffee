@@ -26,7 +26,8 @@ projectRooms = {
   "director": "braingames",
   "levelcreator": "braingames",
   "stackrenderer": "braingames",
-  "oxalis": "oxalis"
+  "oxalis": "oxalis",
+  "time-tracker": "time-tracker"
 }
 
 fireAdminEvent = (msg, data, tag) -> 
