@@ -6,4 +6,4 @@ if [ ! -f .env ]; then
 fi
 
 source .env
-bin/hubot -a hipchat -n Hubot
+bin/hubot -a slack
