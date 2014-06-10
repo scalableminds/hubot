@@ -69,7 +69,7 @@ module.exports = (robot) ->
           else
             canteens.forEach( (canteen) -> 
               msg.send(
-                """#{canteen.name}
+                """*#{canteen.name}*
                 #{canteen.meals.map( (a) -> "* #{a}" ).join("\n")}"""
               )
             )
