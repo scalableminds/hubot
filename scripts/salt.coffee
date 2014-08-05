@@ -19,6 +19,9 @@ modeRegExp = "(prod|dev)"
 
 sys = require('sys')
 exec = require('child_process').exec
+superagent = require("superagent")
+
+caCert = require("fs").readFileSync(__dirname + "/../certs/scm.pem")
 
 projectRooms = {
   "director": "braingames",
@@ -37,6 +40,7 @@ auth = process.env.X_AUTH_Token
 #   process.exit(1)
 
 module.exports = (robot) ->
+
   robot.respond new RegExp("salt (start|stop|restart) #{projectsRegExp} #{branchRegExp} #{modeRegExp}?$","i"), (msg) ->
     cmd = msg.match[1]
     project = msg.match[2]
@@ -47,14 +51,21 @@ module.exports = (robot) ->
       'data' : {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode},
       'tag': 'hubot-services'
     })
-    msg.http(url)
-     .headers(Authorization: auth, 'Content-type': 'application/json')
-     .post(data) (err, res, body) ->
-       result = body
-       if result in ['success']
-          msg.send "Your event was fired"
-       else
+
+    superagent
+      .post(url, data)
+      .ca(caCert)
+      .headers(
+        'Authorization': auth
+        'Content-type': 'application/json'
+      )
+      .end((err, res) ->
+        if err or res.status != 200
           msg.send "There was an error firing off your event"
+        else
+          msg.send "Your event was fired"
+      )
+
 
   # robot.respond new RegExp("salt (install|remove) #{projectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) ->
   #   cmd = msg.match[1]
