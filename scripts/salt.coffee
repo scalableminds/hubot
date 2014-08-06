@@ -21,7 +21,7 @@ sys = require('sys')
 exec = require('child_process').exec
 superagent = require("superagent")
 
-caCert = require("fs").readFileSync(__dirname + "/../certs/scm.pem")
+caCert = require("fs").readFileSync(__dirname + "/../certs/scm.pem", "utf8")
 
 projectRooms = {
   "director": "braingames",
@@ -31,13 +31,10 @@ projectRooms = {
   "time-tracker": "time-tracker"
 }
 
-url = 'https://0.0.0.0:5000/run' # dev
-# url = 'https://0.0.0.0:9090/run' # prod
-
-auth = process.env.X_AUTH_Token
-# unless auth?
-#   console.log "Missing X_AUTH_Token in environment: please set and try again"
-#   process.exit(1)
+auth = process.env.X_AUTH_TOKEN
+unless auth?
+  console.log "Missing X_AUTH_TOKEN in environment: please set and try again"
+  process.exit(1)
 
 module.exports = (robot) ->
 
@@ -48,17 +45,16 @@ module.exports = (robot) ->
     mode = msg.match[4] || "dev"
     data = JSON.stringify({
       'room' : project,
-      'data' : {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode},
-      'tag': 'hubot-services'
+      'data' : {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}
     })
-
+    tag = "#{cmd}"
+    console.log("tag", tag)
     superagent
-      .post(url, data)
+      .post('https://config.scm.io:5000/#{tag}/trigger')
       .ca(caCert)
-      .headers(
-        'Authorization': auth
-        'Content-type': 'application/json'
-      )
+      .set('X-AUTH-TOKEN', auth)
+      .set('Content-type', 'application/json')
+      .send(data)
       .end((err, res) ->
         if err or res.status != 200
           msg.send "There was an error firing off your event"
@@ -73,7 +69,21 @@ module.exports = (robot) ->
   #   branch = msg.match[3]
   #   mode = msg.match[4]
   #   build_number = msg.match[5]
-  #   data = JSON.stringify([msg, 'data' : {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number}, 'tag' : "#{cmd}_packages", projectRooms])
-  #   if (cmd == "install" and build_number) or cmd == "remove"
-  #     robot.http(dev)
-  #       .post(data) (err, res, body) -> msg.send("OK")
+  #   data = JSON.stringify({
+  #     'room' : project,
+  #     'data' : {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number},
+  #     'tag' : "#{cmd}_packages"
+  #   })
+  #   superagent
+  #     .post(url, data)
+  #     .ca(caCert)
+  #     .headers(
+  #       'Authorization': auth
+  #       'Content-type': 'application/json'
+  #     )
+  #     .end((err, res) ->
+  #       if err or res.status != 200
+  #         msg.send "There was an error firing off your event"
+  #       else
+  #         msg.send "Your event was fired"
+  #     )
