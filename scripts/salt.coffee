@@ -48,7 +48,6 @@ module.exports = (robot) ->
       'data' : {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}
     })
     tag = "#{cmd}"
-    console.log("tag", tag)
     superagent
       .post('https://config.scm.io:5000/#{tag}/trigger')
       .ca(caCert)
@@ -63,27 +62,26 @@ module.exports = (robot) ->
       )
 
 
-  # robot.respond new RegExp("salt (install|remove) #{projectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) ->
-  #   cmd = msg.match[1]
-  #   project = msg.match[2]
-  #   branch = msg.match[3]
-  #   mode = msg.match[4]
-  #   build_number = msg.match[5]
-  #   data = JSON.stringify({
-  #     'room' : project,
-  #     'data' : {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number},
-  #     'tag' : "#{cmd}_packages"
-  #   })
-  #   superagent
-  #     .post(url, data)
-  #     .ca(caCert)
-  #     .headers(
-  #       'Authorization': auth
-  #       'Content-type': 'application/json'
-  #     )
-  #     .end((err, res) ->
-  #       if err or res.status != 200
-  #         msg.send "There was an error firing off your event"
-  #       else
-  #         msg.send "Your event was fired"
-  #     )
+  robot.respond new RegExp("salt (install|remove) #{projectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) ->
+    cmd = msg.match[1]
+    project = msg.match[2]
+    branch = msg.match[3]
+    mode = msg.match[4]
+    build_number = msg.match[5]
+    data = JSON.stringify({
+      'room' : project,
+      'data' : {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number},
+    })
+    tag = "#{cmd}"
+    superagent
+      .post('https://config.scm.io:5000/#{tag}/trigger')
+      .ca(caCert)
+      .set('X-AUTH-TOKEN', auth)
+      .set('Content-type', 'application/json')
+      .send(data)
+      .end((err, res) ->
+        if err or res.status != 200
+          msg.send "There was an error firing off your event"
+        else
+          msg.send "Your event was fired"
+      )
