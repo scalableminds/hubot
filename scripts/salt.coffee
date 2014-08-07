@@ -61,7 +61,7 @@ module.exports = (robot) ->
     branch = msg.match[3]
     mode = msg.match[4] || "dev"
     data = {
-      'room' : project,
+      'source' : project,
       'data' : {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}
     }
     url = "https://config.scm.io:5000/#{cmd}/trigger"
@@ -75,7 +75,7 @@ module.exports = (robot) ->
     mode = msg.match[4]
     build_number = msg.match[5]
     data = {
-      'room' : project,
+      'source' : project,
       'data' : {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number}
     }
     url = "https://config.scm.io:5000/#{cmd}/trigger"
