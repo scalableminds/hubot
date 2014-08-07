@@ -43,13 +43,12 @@ module.exports = (robot) ->
     project = msg.match[2]
     branch = msg.match[3]
     mode = msg.match[4] || "dev"
-    data = JSON.stringify({
+    data = {
       'room' : project,
       'data' : {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}
-    })
-    tag = "#{cmd}"
+    }
     superagent
-      .post('https://config.scm.io:5000/#{tag}/trigger')
+      .post("https://config.scm.io:5000/#{cmd}/trigger")
       .ca(caCert)
       .set('X-AUTH-TOKEN', auth)
       .set('Content-type', 'application/json')
@@ -68,13 +67,12 @@ module.exports = (robot) ->
     branch = msg.match[3]
     mode = msg.match[4]
     build_number = msg.match[5]
-    data = JSON.stringify({
+    data = {
       'room' : project,
-      'data' : {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number},
-    })
-    tag = "#{cmd}"
+      'data' : {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number}
+    }
     superagent
-      .post('https://config.scm.io:5000/#{tag}/trigger')
+      .post("https://config.scm.io:5000/#{cmd}/trigger")
       .ca(caCert)
       .set('X-AUTH-TOKEN', auth)
       .set('Content-type', 'application/json')
