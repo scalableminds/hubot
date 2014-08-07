@@ -36,6 +36,21 @@ unless auth?
   console.log "Missing X_AUTH_TOKEN in environment: please set and try again"
   process.exit(1)
 
+
+fireAdminEvent = (url, msg, data) ->
+  superagent
+      .post(url)
+      .ca(caCert)
+      .set('X-AUTH-TOKEN', auth)
+      .set('Content-type', 'application/json')
+      .send(data)
+      .end((err, res) ->
+        if err or res.status != 200
+          msg.send "There was an error firing off your event"
+        else
+          msg.send "Your event was fired"
+      )
+
 module.exports = (robot) ->
 
   robot.respond new RegExp("salt (start|stop|restart) #{projectsRegExp} #{branchRegExp} #{modeRegExp}?$","i"), (msg) ->
@@ -47,18 +62,8 @@ module.exports = (robot) ->
       'room' : project,
       'data' : {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}
     }
-    superagent
-      .post("https://config.scm.io:5000/#{cmd}/trigger")
-      .ca(caCert)
-      .set('X-AUTH-TOKEN', auth)
-      .set('Content-type', 'application/json')
-      .send(data)
-      .end((err, res) ->
-        if err or res.status != 200
-          msg.send "There was an error firing off your event"
-        else
-          msg.send "Your event was fired"
-      )
+    url = "https://config.scm.io:5000/#{cmd}/trigger"
+    fireAdminEvent(url, msg, data)
 
 
   robot.respond new RegExp("salt (install|remove) #{projectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) ->
@@ -71,15 +76,5 @@ module.exports = (robot) ->
       'room' : project,
       'data' : {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number}
     }
-    superagent
-      .post("https://config.scm.io:5000/#{cmd}/trigger")
-      .ca(caCert)
-      .set('X-AUTH-TOKEN', auth)
-      .set('Content-type', 'application/json')
-      .send(data)
-      .end((err, res) ->
-        if err or res.status != 200
-          msg.send "There was an error firing off your event"
-        else
-          msg.send "Your event was fired"
-      )
+    url = "https://config.scm.io:5000/#{cmd}/trigger"
+    fireAdminEvent(url, msg, data)
