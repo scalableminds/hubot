@@ -45,7 +45,9 @@ fireAdminEvent = (url, msg, data) ->
       .set('Content-type', 'application/json')
       .send(data)
       .end((err, res) ->
-        if err or res.status != 200
+        if res.status == 401
+          msg.send res.text
+        else if err or res.status != 200
           msg.send "There was an error firing off your event"
         else
           msg.send "Your event was fired"
