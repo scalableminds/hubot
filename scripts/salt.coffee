@@ -37,9 +37,9 @@ unless auth?
   process.exit(1)
 
 
-fireAdminEvent = (url, msg, data) ->
+fireAdminEvent = (cmd, msg, data) ->
   superagent
-      .post(url)
+      .post("https://config.scm.io:5000/#{cmd}/trigger")
       .ca(caCert)
       .set('X-AUTH-TOKEN', auth)
       .set('Content-type', 'application/json')
@@ -64,8 +64,7 @@ module.exports = (robot) ->
       'source' : project,
       'data' : {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}
     }
-    url = "https://config.scm.io:5000/#{cmd}/trigger"
-    fireAdminEvent(url, msg, data)
+    fireAdminEvent(cmd, msg, data)
 
 
   robot.respond new RegExp("salt (install|remove) #{projectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) ->
@@ -78,5 +77,4 @@ module.exports = (robot) ->
       'source' : project,
       'data' : {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number}
     }
-    url = "https://config.scm.io:5000/#{cmd}/trigger"
-    fireAdminEvent(url, msg, data)
+    fireAdminEvent(cmd, msg, data)
