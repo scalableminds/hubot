@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "hubot": "2.5.1",
-    "hubot-scripts":  "2.4.2",
+    "hubot-scripts": "2.4.2",
     "htmlparser": "1.7.6",
     "soupselect": "0.2.0",
     "hubot-hipchat": "~2.5.1-4",
@@ -30,5 +30,10 @@
   "engines": {
     "node": ">= 0.8.x",
     "npm": ">= 1.1.x"
+  },
+  "devDependencies": {
+    "lodash-node": "^2.4.1",
+    "levenshtein": "^1.0.4",
+    "moment": "^2.0.0"
   }
 }
