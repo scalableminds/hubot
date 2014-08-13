@@ -38,20 +38,26 @@ unless auth?
 
 
 fireAdminEvent = (cmd, msg, data) ->
-  superagent
-      .post("https://config.scm.io:5000/#{cmd}/trigger")
-      .ca(caCert)
-      .set('X-AUTH-TOKEN', auth)
-      .set('Content-type', 'application/json')
-      .send(data)
-      .end((err, res) ->
-        if res.status == 401
-          msg.send res.text
-        else if err or res.status != 200
-          msg.send "There was an error firing off your event"
-        else
-          msg.send "Your event was fired"
-      )
+  url = "https://config.scm.io:5000/#{cmd}/trigger"
+  if(msg.message.room == projectRooms[data['project']])
+    superagent
+        .post(url)
+        .ca(caCert)
+        .set('X-AUTH-TOKEN', auth)
+        .set('Content-type', 'application/json')
+        .send(data)
+        .end((err, res) ->
+          if res.status == 401
+            msg.send res.text
+          else if err or res.status != 200
+            msg.send "There was an error firing off your event"
+          else
+            msg.send "Your event was fired"
+        )
+  else if msg.message.room == "Shell"
+    msg.send("Data #{JSON.stringify(data)} was send with #{cmd} event to #{url}")
+  else
+    msg.send("Switch to room #{projectRooms[data['project']]} for administrating #{data['project']}")
 
 module.exports = (robot) ->
 
