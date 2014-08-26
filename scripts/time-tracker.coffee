@@ -14,7 +14,7 @@
 
 request = require("request")
 _ = require("lodash-node")
-Levenshtein = require("Levenshtein")
+Levenshtein = require("levenshtein")
 moment = require("moment")
 
 
