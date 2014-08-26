@@ -28,7 +28,7 @@ projectRooms = {
   "time-tracker": "time-tracker"
 }
 
-fireAdminEvent = (msg, data, tag) -> 
+triggerEvent = (msg, data, tag) -> 
   cmd = "sudo salt-call event.fire_master #{JSON.stringify(data).replace(/\"/g, "\\\"")} #{tag}"
   if msg.message.room == projectRooms[data['project']]
     exec(cmd,  (error, stdout, stderr) -> 
@@ -48,7 +48,8 @@ module.exports = (robot) ->
     project = msg.match[2]
     branch = msg.match[3]
     mode = msg.match[4] || "dev"
-    fireAdminEvent(msg, {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}, "hubot-services")
+    data = {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}
+    triggerEvent(msg, data, "hubot-services")
 
   robot.respond new RegExp("salt (install|remove) #{projectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) -> 
     cmd = msg.match[1]
@@ -56,5 +57,8 @@ module.exports = (robot) ->
     branch = msg.match[3]
     mode = msg.match[4]
     build_number = msg.match[5]
-    if (cmd == "install" and build_number) or cmd == "remove"
-      fireAdminEvent(msg, {'project': project, 'branch': branch, 'mode': mode, 'build_number': build_number}, "#{cmd}_packages")
+    data = {'project': project, 'branch': branch, 'mode': mode}
+    if (cmd == "install" and build_number)
+      data['build_number'] = build_number
+    if ((cmd == "install" and build_number) or cmd == "remove")
+      triggerEvent(msg, data, "#{cmd}_packages")
