@@ -19,12 +19,10 @@
     "url": "https://github.com/github/hubot.git"
   },
   "dependencies": {
-    "hubot": "2.5.1",
-    "hubot-scripts": "2.4.2",
+    "hubot": "2.8.1",
+    "hubot-scripts": "2.5.15",
     "async": "~0.2.9",
     "htmlparser": "1.7.6",
-    "hubot": "2.5.1",
-    "hubot-scripts": "2.4.2",
     "hubot-slack": "^2.1.0",
     "moment": "~2.0.0",
     "soupselect": "0.2.0",
