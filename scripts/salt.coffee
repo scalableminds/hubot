@@ -19,6 +19,9 @@ modeRegExp = "(prod|dev)"
 
 sys = require('sys')
 exec = require('child_process').exec
+superagent = require("superagent")
+
+caCert = require("fs").readFileSync(__dirname + "/../certs/scm.pem", "utf8")
 
 projectRooms = {
   "director": "braingames",
@@ -28,37 +31,52 @@ projectRooms = {
   "time-tracker": "time-tracker"
 }
 
-triggerEvent = (msg, data, tag) -> 
-  cmd = "sudo salt-call event.fire_master #{JSON.stringify(data).replace(/\"/g, "\\\"")} #{tag}"
-  if msg.message.room == projectRooms[data['project']]
-    exec(cmd,  (error, stdout, stderr) -> 
-      if error == null
-        msg.send("ok!")
-      else
-        msg.send("error: #{stderr} \n #{error}")
-    )
+auth = process.env.X_AUTH_TOKEN
+unless auth?
+  console.log "Missing X_AUTH_TOKEN in environment: please set and try again"
+  process.exit(1)
+
+
+triggerEvent = (cmd, msg, data) ->
+  url = "https://config.scm.io:5000/#{cmd}/trigger"
+  if(msg.message.room == projectRooms[data['project']])
+    superagent
+        .post(url)
+        .ca(caCert)
+        .set('X-AUTH-TOKEN', auth)
+        .set('Content-type', 'application/json')
+        .send(data)
+        .end((err, res) ->
+          if res.status == 401
+            msg.send res.text
+          else if err or res.status != 200
+            msg.send "There was an error firing off your event."
+          else
+            msg.send "Your event was fired"
+        )
   else if msg.message.room == "Shell"
-    msg.send(cmd)
+    msg.send("Data #{JSON.stringify(data)} was send with #{cmd} event to #{url}")
   else
     msg.send("Switch to room #{projectRooms[data['project']]} for administrating #{data['project']}")
 
 module.exports = (robot) ->
+
   robot.respond new RegExp("salt (start|stop|restart) #{projectsRegExp} #{branchRegExp} #{modeRegExp}?$","i"), (msg) ->
     cmd = msg.match[1]
     project = msg.match[2]
     branch = msg.match[3]
     mode = msg.match[4] || "dev"
-    data = {'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode}
-    triggerEvent(msg, data, "hubot-services")
+    data = {'source' : project, 'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode }
+    triggerEvent(cmd, msg, data)
 
-  robot.respond new RegExp("salt (install|remove) #{projectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) -> 
+  robot.respond new RegExp("salt (install|remove) #{projectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) ->
     cmd = msg.match[1]
     project = msg.match[2]
     branch = msg.match[3]
     mode = msg.match[4]
     build_number = msg.match[5]
-    data = {'project': project, 'branch': branch, 'mode': mode}
+    data = {'source' : project, 'project': project, 'branch': branch, 'mode': mode}
     if (cmd == "install" and build_number)
       data['build_number'] = build_number
     if ((cmd == "install" and build_number) or cmd == "remove")
-      triggerEvent(msg, data, "#{cmd}_packages")
+      triggerEvent("#{cmd}_packages", msg, data)
