@@ -67,7 +67,7 @@ module.exports = (robot) ->
     branch = msg.match[3]
     mode = msg.match[4] || "dev"
     data = {'source' : project, 'cmd': cmd, 'project': project, 'branch': branch, 'mode': mode }
-    triggerEvent(cmd, msg, data)
+    triggerEvent("hubot-services", msg, data)
 
   robot.respond new RegExp("salt (install|remove) #{projectsRegExp} #{branchRegExp} #{modeRegExp} ?([0-9]+)?$", "i"), (msg) ->
     cmd = msg.match[1]
