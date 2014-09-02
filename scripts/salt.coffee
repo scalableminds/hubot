@@ -38,7 +38,7 @@ unless auth?
 
 
 triggerEvent = (cmd, msg, data) ->
-  url = "https://config.scm.io:5000/#{cmd}/trigger"
+  url = "https://config.scm.io/#{cmd}/trigger"
   if(msg.message.room == projectRooms[data['project']])
     superagent
         .post(url)
