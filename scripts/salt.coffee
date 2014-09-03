@@ -79,4 +79,4 @@ module.exports = (robot) ->
     if (cmd == "install" and build_number)
       data['build_number'] = build_number
     if ((cmd == "install" and build_number) or cmd == "remove")
-      triggerEvent("#{cmd}_packages", msg, data)
+      triggerEvent("#{cmd}_packages_new", msg, data)
