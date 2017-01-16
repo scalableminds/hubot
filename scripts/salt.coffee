@@ -27,7 +27,7 @@ projectRooms = {
   "director": "braingames",
   "levelcreator": "braingames",
   "stackrenderer": "braingames",
-  "oxalis": "oxalis",
+  "oxalis": "webknossos-bots",
   "time-tracker": "time-tracker"
 }
 
