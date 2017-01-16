@@ -27,15 +27,13 @@
     "moment": "~2.0.0",
     "soupselect": "0.2.0",
     "request": "2.40.0",
-    "superagent": "^0.18.2"
+    "superagent": "^0.18.2",
+    "lodash-node": "^2.4.1",
+    "levenshtein": "^1.0.4",
+    "moment": "^2.0.0"
   },
   "engines": {
     "node": ">= 0.8.x",
     "npm": ">= 1.1.x"
-  },
-  "devDependencies": {
-    "lodash-node": "^2.4.1",
-    "levenshtein": "^1.0.4",
-    "moment": "^2.0.0"
   }
 }
