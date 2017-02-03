@@ -12,5 +12,6 @@
 
 module.exports = (robot) ->
 
-  robot.respond /meow/i, (msg) ->
-    msg.send "http://thecatapi.com/api/images/get?format=src"
+  robot.http("http://thecatapi.com/api/images/get?format=src").get() (err, response, body ) ->
+
+    msg.send response.request.uri.href
