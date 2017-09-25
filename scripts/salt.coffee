@@ -17,8 +17,6 @@ projectsRegExp = "(#{projects.join("|")})"
 branchRegExp = "([a-zA-Z-._0-9]+)"
 modeRegExp = "(prod|dev)"
 
-sys = require('sys')
-exec = require('child_process').exec
 superagent = require("superagent")
 
 caCert = require("fs").readFileSync(__dirname + "/../certs/scm.pem", "utf8")
