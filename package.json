@@ -19,20 +19,20 @@
     "url": "https://github.com/github/hubot.git"
   },
   "dependencies": {
+    "async": "~0.2.9",
+    "debug": "^3.0.1",
+    "htmlparser": "1.7.6",
     "hubot": "2.8.1",
     "hubot-scripts": "2.5.15",
-    "async": "~0.2.9",
-    "htmlparser": "1.7.6",
     "hubot-slack": "^2.1.0",
-    "moment": "^2.0.0",
-    "soupselect": "0.2.0",
-    "request": "2.40.0",
-    "superagent": "^0.18.2",
+    "levenshtein": "^1.0.4",
     "lodash-node": "^2.4.1",
-    "levenshtein": "^1.0.4"
+    "moment": "^2.0.0",
+    "request": "2.40.0",
+    "soupselect": "0.2.0",
+    "superagent": "^0.18.2"
   },
   "engines": {
-    "node": ">= 0.8.x",
-    "npm": ">= 1.1.x"
+    "node": ">= 8.x.x"
   }
 }
